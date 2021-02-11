@@ -60,3 +60,25 @@ async def create_users_connections(first_user_id: int, second_user_id: int):
 
 	redis.close()
 	await redis.wait_closed()
+
+
+async def check_user_connection(user_id: int):
+	redis = await aioredis.create_redis_pool(f'redis://{REDIS_HOST}', password=REDIS_PASSWORD)
+
+	result = await redis.execute("HEXISTS", "users_connections", user_id)
+
+	redis.close()
+	await redis.wait_closed()
+
+	return result
+
+
+async def get_user_connection(user_id: int):
+	redis = await aioredis.create_redis_pool(f'redis://{REDIS_HOST}', password=REDIS_PASSWORD)
+
+	companion_id = int(await redis.execute("HGET", "users_connections", user_id))
+
+	redis.close()
+	await redis.wait_closed()
+
+	return companion_id

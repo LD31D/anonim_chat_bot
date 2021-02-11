@@ -1,3 +1,4 @@
+from aiogram import types
 from aiogram.dispatcher.filters.builtin import Command
 
 from bot.utils import redis
@@ -5,7 +6,7 @@ from bot.loader import dp, bot
 
 
 @dp.message_handler(Command('go'))
-async def add_user_to_queue(message):
+async def add_user_to_queue(message: types.Message):
 	user_id = message.chat.id
 
 	if await redis.check_user_in_queue(user_id):
