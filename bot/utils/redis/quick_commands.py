@@ -24,18 +24,39 @@ async def get_len_users_queue():
 
 
 async def check_user_in_queue(user_id: int):
-	queue_len = await get_len_users_queue()
+	queue_len = await get_len_users_queue() # Getting len of queue
 
 	if queue_len:
 		redis = await aioredis.create_redis_pool(f'redis://{REDIS_HOST}', password=REDIS_PASSWORD)
 
+		# Getting all users in queue for checking user in queue 
 		users_queue_range = await redis.execute("LRANGE", "users_queue", 0, queue_len)
 
 		redis.close()
 		await redis.wait_closed()
 
-		for user in users_queue_range:
-			if int(user) == user_id:
-				return False
+		return user_id not in list(map(int, users_queue_range))
 
 	return True
+
+
+async def get_users_couple():
+	redis = await aioredis.create_redis_pool(f'redis://{REDIS_HOST}', password=REDIS_PASSWORD)
+
+	first_user_id = int(await redis.execute("LPOP", "users_queue"))
+	second_user_id = int(await redis.execute("LPOP", "users_queue"))
+
+	redis.close()
+	await redis.wait_closed()
+
+	return first_user_id, second_user_id
+
+
+async def create_users_connections(first_user_id: int, second_user_id: int):
+	redis = await aioredis.create_redis_pool(f'redis://{REDIS_HOST}', password=REDIS_PASSWORD)
+
+	await redis.execute("HSET", "users_connections", first_user_id, second_user_id)
+	await redis.execute("HSET", "users_connections", second_user_id, first_user_id)
+
+	redis.close()
+	await redis.wait_closed()
