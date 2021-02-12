@@ -82,3 +82,12 @@ async def get_user_connection(user_id: int):
 	await redis.wait_closed()
 
 	return companion_id
+
+
+async def delete_user_connection(user_id: int):
+	redis = await aioredis.create_redis_pool(f'redis://{REDIS_HOST}', password=REDIS_PASSWORD)
+
+	await redis.execute("HDEL", "users_connections", user_id)
+
+	redis.close()
+	await redis.wait_closed()
