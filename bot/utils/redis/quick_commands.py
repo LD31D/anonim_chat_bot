@@ -1,6 +1,6 @@
 import aioredis
 
-from bot.data.config import REDIS_HOST, REDIS_PASSWORD
+from bot.config import REDIS_HOST, REDIS_PASSWORD
 
 
 async def add_user_to_queue(user_id: int):
