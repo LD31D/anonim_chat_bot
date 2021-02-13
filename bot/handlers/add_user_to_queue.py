@@ -1,11 +1,12 @@
 from aiogram import types
-from aiogram.dispatcher.filters.builtin import Command
+from aiogram.dispatcher.filters.builtin import Text
 
 from bot.utils import redis
 from bot.loader import dp, bot
+from bot.keyboards import end_dialog_keyboard
 
 
-@dp.message_handler(Command('go'))
+@dp.message_handler(Text('🔎 Найти собеседника'))
 async def add_user_to_queue_handler(message: types.Message):
 	user_id = message.chat.id
 
@@ -18,8 +19,8 @@ async def add_user_to_queue_handler(message: types.Message):
 			await redis.create_users_connections(first_user_id, second_user_id)
 
 			text = "Ваш собеседник был найден. Можете начать общение 😜"
-			await bot.send_message(first_user_id, text)
-			await bot.send_message(second_user_id, text)
+			await bot.send_message(first_user_id, text, reply_markup=end_dialog_keyboard)
+			await bot.send_message(second_user_id, text, reply_markup=end_dialog_keyboard)
 
 			return 
 
