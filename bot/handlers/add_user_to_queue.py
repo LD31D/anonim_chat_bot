@@ -3,7 +3,7 @@ from aiogram.dispatcher.filters.builtin import Text
 
 from bot.utils import redis
 from bot.loader import dp, bot
-from bot.keyboards import end_dialog_keyboard
+from bot.keyboards import end_dialog_keyboard, leave_queue_keyboard
 
 
 @dp.message_handler(Text('🔎 Найти собеседника'))
@@ -24,7 +24,13 @@ async def add_user_to_queue_handler(message: types.Message):
 
 			return 
 
-		await message.answer("Ожидайте своего собеседника 😊")
+		await message.answer(
+				"Ожидайте своего собеседника 😊",
+				reply_markup=leave_queue_keyboard
+			)
 
 	else:	
-		await message.answer("Вы уже находитесь в очереди! Ожидайте своего собеседника 😊")
+		await message.answer(
+				"Вы уже находитесь в очереди! Ожидайте своего собеседника 😊",
+				reply_markup=leave_queue_keyboard
+			)

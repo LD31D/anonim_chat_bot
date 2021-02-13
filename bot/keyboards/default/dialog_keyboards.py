@@ -14,7 +14,16 @@ start_dialog_keyboard = ReplyKeyboardMarkup(
 end_dialog_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text="⬅️ Закончить диалог"),
+            KeyboardButton(text="❌ Закончить диалог"),
+        ],
+    ],
+    resize_keyboard=True
+)
+
+leave_queue_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="⬅️ Покинуть очередь"),
         ],
     ],
     resize_keyboard=True

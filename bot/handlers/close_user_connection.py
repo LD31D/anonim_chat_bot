@@ -7,7 +7,7 @@ from bot.filters import IsUserConnectionExist
 from bot.keyboards import start_dialog_keyboard
 
 
-@dp.message_handler(Text('⬅️ Закончить диалог'), IsUserConnectionExist())
+@dp.message_handler(Text('❌ Закончить диалог'), IsUserConnectionExist())
 async def close_dialog_handler(message: types.Message):
 	user_id = message.chat.id
 	companion_id = await redis.get_user_connection(user_id)

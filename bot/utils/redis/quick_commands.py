@@ -91,3 +91,12 @@ async def delete_user_connection(user_id: int):
 
 	redis.close()
 	await redis.wait_closed()
+
+
+async def delete_user_from_queue(user_id: int):
+	redis = await aioredis.create_redis_pool(f'redis://{REDIS_HOST}', password=REDIS_PASSWORD)
+
+	await redis.execute("LREM", "users_queue", 1, user_id)
+
+	redis.close()
+	await redis.wait_closed()
