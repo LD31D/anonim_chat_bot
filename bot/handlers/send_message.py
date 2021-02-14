@@ -71,3 +71,11 @@ async def send_video_note_message_handler(message: types.Message):
 	companion_id = await redis.get_user_connection(user_id)
 
 	await bot.send_video_note(companion_id, video_note)
+
+
+@dp.message_handler(IsUserConnectionExist(), content_types=types.ContentType.ANY)
+async def catch_else_message_format_handler(message: types.Message):
+	await message.reply(
+			"Сообщение не было отправлено! "
+			"На данный момент, бот не поддерживает подобный формат сообщений 😟"
+		)
