@@ -27,6 +27,18 @@ async def send_photo_message_handler(message: types.Message):
 	await bot.send_photo(companion_id, photo, caption=caption)
 
 
+@dp.message_handler(IsUserConnectionExist(), content_types=types.ContentType.VIDEO)
+async def send_video_message_handler(message: types.Message):
+	user_id = message.chat.id
+
+	video = message.video.file_id
+	caption = message.caption
+
+	companion_id = await redis.get_user_connection(user_id)
+
+	await bot.send_video(companion_id, video, caption=caption)
+
+
 @dp.message_handler(IsUserConnectionExist(), content_types=types.ContentType.AUDIO)
 async def send_audio_message_handler(message: types.Message):
 	user_id = message.chat.id
@@ -43,19 +55,19 @@ async def send_audio_message_handler(message: types.Message):
 async def send_voice_message_handler(message: types.Message):
 	user_id = message.chat.id
 
-	audio = message.voice.file_id
+	voice = message.voice.file_id
 
 	companion_id = await redis.get_user_connection(user_id)
 
-	await bot.send_voice(companion_id, audio)
+	await bot.send_voice(companion_id, voice)
 
 
 @dp.message_handler(IsUserConnectionExist(), content_types=types.ContentType.VIDEO_NOTE)
 async def send_video_note_message_handler(message: types.Message):
 	user_id = message.chat.id
 
-	audio = message.video_note.file_id
+	video_note = message.video_note.file_id
 
 	companion_id = await redis.get_user_connection(user_id)
 
-	await bot.send_video_note(companion_id, audio)
+	await bot.send_video_note(companion_id, video_note)
