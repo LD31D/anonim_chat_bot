@@ -48,3 +48,14 @@ async def send_voice_message_handler(message: types.Message):
 	companion_id = await redis.get_user_connection(user_id)
 
 	await bot.send_voice(companion_id, audio)
+
+
+@dp.message_handler(IsUserConnectionExist(), content_types=types.ContentType.VIDEO_NOTE)
+async def send_video_note_message_handler(message: types.Message):
+	user_id = message.chat.id
+
+	audio = message.video_note.file_id
+
+	companion_id = await redis.get_user_connection(user_id)
+
+	await bot.send_video_note(companion_id, audio)
