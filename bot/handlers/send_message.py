@@ -27,7 +27,7 @@ async def send_photo_message_handler(message: types.Message):
 	await bot.send_photo(companion_id, photo, caption=caption)
 
 
-@dp.message_handler(content_types=types.ContentType.AUDIO)
+@dp.message_handler(IsUserConnectionExist(), content_types=types.ContentType.AUDIO)
 async def send_audio_message_handler(message: types.Message):
 	user_id = message.chat.id
 
@@ -37,3 +37,14 @@ async def send_audio_message_handler(message: types.Message):
 	companion_id = await redis.get_user_connection(user_id)
 
 	await bot.send_audio(companion_id, audio, caption=caption)
+
+
+@dp.message_handler(IsUserConnectionExist(), content_types=types.ContentType.VOICE)
+async def send_voice_message_handler(message: types.Message):
+	user_id = message.chat.id
+
+	audio = message.voice.file_id
+
+	companion_id = await redis.get_user_connection(user_id)
+
+	await bot.send_voice(companion_id, audio)
