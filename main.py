@@ -6,12 +6,12 @@ from bot.config import WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT, WEBHOOK_URL
 
 
 async def on_startup(dp):
-	await db.create()
+	await bot.remove_webhook()
 	await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True)
 
 
 if __name__ == '__main__':
-	executor.start_polling(dp)
+	# executor.start_polling(dp)
 
 	executor.start_webhook(
         dispatcher=dp,
